@@ -1,22 +1,29 @@
 <script setup>
 import { Head, Link } from "@inertiajs/vue3";
-import { useForm } from "@inertiajs/vue3";
 
 defineProps({
-    canLogin: Boolean,
-    canRegister: Boolean,
+    canLogin: {
+        type: Boolean,
+    },
+    canRegister: {
+        type: Boolean,
+    },
+    laravelVersion: {
+        type: String,
+        required: true,
+    },
+    phpVersion: {
+        type: String,
+        required: true,
+    },
 });
 
-const form = useForm("createProduct", {
-    name: null,
-    slug: null,
-});
-
-const submit = () => {
-    form.post(route("products.create"), {
-        onSuccess: () => form.reset(),
-    });
-};
+// function handleImageError() {
+//     document.getElementById("screenshot-container")?.classList.add("!hidden");
+//     document.getElementById("docs-card")?.classList.add("!row-span-1");
+//     document.getElementById("docs-card-content")?.classList.add("!flex-row");
+//     document.getElementById("background")?.classList.add("!hidden");
+// }
 </script>
 
 <template>
@@ -62,7 +69,16 @@ const submit = () => {
                         </template>
                     </nav>
                 </header>
-                <main class="mt-6">Test Default</main>
+
+                <main class="mt-6">
+                    <div class="text-center"></div>
+                </main>
+
+                <footer
+                    class="py-16 text-center text-sm text-black dark:text-white/70"
+                >
+                    Testing Laravel + Jetstream + Inertia + Vue 3 + Vite
+                </footer>
             </div>
         </div>
     </div>
