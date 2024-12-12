@@ -226,7 +226,7 @@ watch([rowsPerPage, customRowsPerPage], () => {
                     :disabled="currentPage === 1"
                     class="px-3 py-2 border rounded disabled:opacity-50"
                 >
-                    Previous
+                    {{ "<" }}
                 </button>
                 <button
                     v-for="page in visiblePageNumbers"
@@ -246,7 +246,7 @@ watch([rowsPerPage, customRowsPerPage], () => {
                     :disabled="currentPage === totalPages"
                     class="px-3 py-2 border rounded disabled:opacity-50"
                 >
-                    Next
+                    {{ ">" }}
                 </button>
             </div>
         </div>

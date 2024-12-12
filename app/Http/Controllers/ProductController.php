@@ -4,40 +4,98 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 
 class ProductController extends Controller
 {
+    /**
+     * Menampilkan daftar produk
+     */
     public function index()
     {
-        $product = Product::all();
+        // Ambil semua produk dari database
+        $products = Product::all();
 
+        // Render halaman produk menggunakan Inertia
         return Inertia::render('Product', [
-            'products' => $product
+            'products' => $products
         ]);
     }
-    public function create()
-    {
-        return Inertia::render('Prduct/Create');
-    }
+
+    /**
+     * Menyimpan produk baru
+     */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required', // Sesuaikan dengan kebutuhan validasi
-            'description' => 'required' // Ganti 'email' dengan field yang sesuai
+        // Validasi input
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0'
         ]);
 
-        // Buat produk
-        $product = Product::create([
-            'name' => $request->name, // Gunakan $request->name, bukan title
-            'description' => $request->description // Gunakan field yang sesuai
+        // Buat produk baru
+        $product = Product::create($validatedData);
+
+        // Kembalikan produk yang baru dibuat
+        return back()->with([
+            'products' => $product,
+            'success' => 'Produk berhasil ditambahkan'
+        ]);
+    }
+
+    /**
+     * Menampilkan form tambah produk (opsional)
+     */
+    public function create()
+    {
+        return Inertia::render('Product/Create');
+    }
+
+    /**
+     * Menampilkan detail produk (opsional)
+     */
+    public function show(Product $product)
+    {
+        return Inertia::render('Product/Show', [
+            'product' => $product
+        ]);
+    }
+
+    /**
+     * Menampilkan form edit produk (opsional)
+     */
+    public function edit(Product $product)
+    {
+        return Inertia::render('Product/Edit', [
+            'product' => $product
+        ]);
+    }
+
+    /**
+     * Memperbarui produk (opsional)
+     */
+    public function update(Request $request, Product $product)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0'
         ]);
 
-        if ($product) {
-            return Redirect::route('products.index')->with('message', 'Data Berhasil Disimpan!');
-        }
+        $product->update($validatedData);
 
-        // Tambahkan penanganan jika produk gagal dibuat
-        return Redirect::back()->withErrors('Gagal menyimpan produk');
+        return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui');
+    }
+
+    /**
+     * Menghapus produk (opsional)
+     */
+    public function destroy(Product $product)
+    {
+        $product->delete();
+
+        return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus');
     }
 }

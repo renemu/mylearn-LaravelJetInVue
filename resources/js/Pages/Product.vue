@@ -2,6 +2,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import DatatableClient from "@/Components/Datatable/DatatableClient.vue";
 import { reactive, ref } from "vue";
+import { useForm, usePage } from "@inertiajs/vue3";
 const state = reactive({
     columns: [
         {
@@ -15,6 +16,14 @@ const state = reactive({
         {
             name: "description",
             label: "Description",
+        },
+        {
+            name: "price",
+            label: "Price",
+        },
+        {
+            name: "stock",
+            label: "Stock",
         },
     ],
 });
@@ -30,14 +39,24 @@ function addData() {
     isModalOpen.value = true;
 }
 
-const formData = ref({
+const formData = useForm({
     name: "",
     description: "",
+    price: "",
+    stock: "",
 });
-
 function submitData() {
-    console.log(formData.value);
-    isModalOpen.value = false;
+    formData.post(route("products.store"), {
+        onSuccess: () => {
+            // Reset form dan tutup modal
+            isModalOpen.value = false;
+            formData.reset();
+            console.log("halah");
+        },
+        onError: (errors) => {
+            console.error("Error during submission:", errors);
+        },
+    });
 }
 </script>
 
@@ -104,6 +123,28 @@ function submitData() {
                             <input
                                 type="text"
                                 v-model="formData.description"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                            />
+                        </div>
+                        <div class="mb-4">
+                            <label
+                                class="block text-sm font-medium text-gray-700"
+                                >Price</label
+                            >
+                            <input
+                                type="number"
+                                v-model="formData.price"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                            />
+                        </div>
+                        <div class="mb-4">
+                            <label
+                                class="block text-sm font-medium text-gray-700"
+                                >Stock</label
+                            >
+                            <input
+                                type="number"
+                                v-model="formData.stock"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                             />
                         </div>
