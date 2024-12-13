@@ -1,6 +1,14 @@
+<script>
+export default {
+    name: "DatatableClient",
+};
+</script>
 <script setup>
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, reactive } from "vue";
 import { debounce } from "lodash";
+import { Link } from "@inertiajs/vue3";
+import moment from "moment";
+import thousandSeparator from "@/utils/thousandSeparator";
 
 const props = defineProps({
     dataTable: {
@@ -12,13 +20,33 @@ const props = defineProps({
         default: () => [],
     },
 });
-// Table Configuration
-const columns = props.column;
 
-// Mock Data (would typically come from an API or parent component)
-const data = ref(props.dataTable);
+// Reactive state with deep watch on props
+const state = reactive({
+    columns: props.column,
+    data: props.dataTable,
+});
 
-// State Management
+// Watch props for changes and update state
+watch(
+    () => props.dataTable,
+    (newData) => {
+        state.data = newData;
+        // Reset pagination when data changes
+        currentPage.value = 1;
+    },
+    { deep: true }
+);
+
+watch(
+    () => props.column,
+    (newColumns) => {
+        state.columns = newColumns;
+    },
+    { deep: true }
+);
+
+// Rest of the original code remains the same...
 const searchQuery = ref("");
 const debouncedSearchQuery = ref("");
 const currentPage = ref(1);
@@ -26,7 +54,7 @@ const rowsPerPage = ref(5);
 const rowsPerPageOptions = [5, 10, 15, 20];
 const customRowsPerPage = ref(5);
 const sortKey = ref("id");
-const sortOrder = ref("asc");
+const sortOrder = ref("desc");
 
 // Debounce search to improve performance
 watch(
@@ -38,10 +66,10 @@ watch(
 
 // Reactive Data Processing
 const filteredData = computed(() => {
-    if (!debouncedSearchQuery.value) return data.value;
+    if (!debouncedSearchQuery.value) return state.data;
 
     const searchTerm = debouncedSearchQuery.value.toLowerCase();
-    return data.value.filter((item) =>
+    return state.data.filter((item) =>
         Object.values(item).some((value) =>
             String(value).toLowerCase().includes(searchTerm)
         )
@@ -102,18 +130,33 @@ function updateSort(key) {
 
 function editItem(item) {
     // Placeholder for edit functionality
-    console.log("Edit item:", item);
+    console.log("Edit item:", item.id, item.name);
 }
 
 function deleteItem(item) {
     // Placeholder for delete functionality
-    data.value = data.value.filter((d) => d.id !== item.id);
+    state.data = state.data.filter((d) => d.id !== item.id);
 }
 
 // Reset current page when rows per page changes
 watch([rowsPerPage, customRowsPerPage], () => {
     currentPage.value = 1;
 });
+function formatDate(date) {
+    if (date) {
+        return moment(date, "YYYY-MM-DD").format("DD MMM YYYY");
+    }
+    return "";
+}
+function formatDateTime(date) {
+    if (date) {
+        return moment(date, "YYYY-MM-DD HH:mm:ss").format(
+            "DD MMM YYYY HH:mm:ss"
+        );
+    }
+    return "";
+    // return date;
+}
 </script>
 <template>
     <div class="overflow-x-auto">
@@ -124,14 +167,16 @@ watch([rowsPerPage, customRowsPerPage], () => {
                 Show
                 <select
                     v-model="rowsPerPage"
-                    class="border rounded-lg px-4 py-2 focus:ring focus:ring-blue-300 focus:outline-none"
+                    class="border rounded-lg px-2 py-1 focus:ring-0"
                 >
                     <option
                         v-for="option in rowsPerPageOptions"
                         :key="option"
                         :value="option"
                     >
-                        {{ option }}
+                        <span>
+                            {{ option }}
+                        </span>
                     </option>
                     <option value="custom">Custom</option>
                 </select>
@@ -142,7 +187,7 @@ watch([rowsPerPage, customRowsPerPage], () => {
                     type="number"
                     min="1"
                     placeholder="Enter rows"
-                    class="border rounded-lg px-4 py-2 focus:ring focus:ring-blue-300 focus:outline-none w-24"
+                    class="border rounded-lg px-2 py-1 focus:ring-0w-24"
                 />
                 Entries
             </div>
@@ -152,7 +197,7 @@ watch([rowsPerPage, customRowsPerPage], () => {
                     v-model="debouncedSearchQuery"
                     type="text"
                     placeholder="Search data..."
-                    class="border rounded-lg px-4 py-2 focus:ring focus:ring-blue-300 focus:outline-none"
+                    class="border rounded-lg px-2 py-1 focus:ring-0"
                 />
             </div>
         </div>
@@ -162,7 +207,7 @@ watch([rowsPerPage, customRowsPerPage], () => {
             <thead class="bg-gray-100 text-gray-700 uppercase text-sm">
                 <tr>
                     <th
-                        v-for="column in columns"
+                        v-for="column in state.columns"
                         :key="column.name"
                         class="px-6 py-3 border-b cursor-pointer hover:bg-gray-200"
                         @click="updateSort(column.name)"
@@ -172,40 +217,78 @@ watch([rowsPerPage, customRowsPerPage], () => {
                             {{ sortOrder === "asc" ? "▲" : "▼" }}
                         </span>
                     </th>
-                    <th class="px-6 py-3 border-b">Actions</th>
                 </tr>
             </thead>
             <tbody class="text-gray-600">
                 <tr
                     v-for="(item, index) in paginatedData"
-                    :key="item.id"
+                    :key="index"
                     class="hover:bg-gray-50 transition-colors duration-200"
                 >
                     <td
-                        v-for="column in columns"
+                        v-for="column in state.columns"
                         :key="column.name"
+                        :width="column.width"
                         class="px-6 py-4 border-b"
                     >
-                        {{ item[column.name] }}
-                    </td>
-                    <td class="px-6 py-4 border-b space-x-2">
-                        <button
-                            @click="editItem(item)"
-                            class="text-blue-600 hover:text-blue-800 transition-colors"
-                        >
-                            Edit
-                        </button>
-                        <button
-                            @click="deleteItem(item)"
-                            class="text-red-600 hover:text-red-800 transition-colors"
-                        >
-                            Delete
-                        </button>
+                        <template v-if="column.btnAction">
+                            <div class="space-x-2">
+                                <button
+                                    @click="editItem(item)"
+                                    class="text-blue-600 hover:text-blue-800 transition-colors"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    @click="deleteItem(item)"
+                                    class="text-red-600 hover:text-red-800 transition-colors"
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </template>
+                        <template v-else-if="column.custom">
+                            <div
+                                v-if="column.custom.routeName"
+                                :class="column.class"
+                            >
+                                <Link
+                                    :href="
+                                        route(column.custom.routeName, {
+                                            id: item[column.custom.routeParam],
+                                        })
+                                    "
+                                >
+                                    <i :class="column.custom.icon"></i>
+                                    {{ item[column.name] }}
+                                </Link>
+                            </div>
+                        </template>
+                        <template v-else-if="column.isDate">
+                            <div :class="column.class">
+                                {{ formatDate(item[column.name]) }}
+                            </div>
+                        </template>
+                        <template v-else-if="column.isDateTime">
+                            <div :class="column.class">
+                                {{ formatDateTime(item[column.name]) }}
+                            </div>
+                        </template>
+                        <template v-else-if="column.isCurrency">
+                            <div :class="column.class">
+                                Rp. {{ thousandSeparator(item[column.name]) }}
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div :class="column.class">
+                                {{ item[column.name] }}
+                            </div>
+                        </template>
                     </td>
                 </tr>
                 <tr v-if="paginatedData.length === 0">
                     <td
-                        :colspan="columns.length + 1"
+                        :colspan="state.columns.length + 1"
                         class="text-center py-4 text-gray-500"
                     >
                         No data available

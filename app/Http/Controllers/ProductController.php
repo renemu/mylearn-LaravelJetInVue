@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
-
 class ProductController extends Controller
 {
     /**
@@ -16,7 +15,7 @@ class ProductController extends Controller
         $products = Product::all();
 
         // Render halaman produk menggunakan Inertia
-        return Inertia::render('Product', [
+        return Inertia::render('Product/Product', [
             'products' => $products
         ]);
     }
@@ -30,11 +29,11 @@ class ProductController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
+            'price' => 'required|integer|min:0',
             'stock' => 'required|integer|min:0'
         ]);
 
-        // Buat produk baru
+        // // Buat produk baru
         $product = Product::create($validatedData);
 
         // Kembalikan produk yang baru dibuat
@@ -57,8 +56,8 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return Inertia::render('Product/Show', [
-            'product' => $product
+        return Inertia::render('Product/Detail', [
+            'products' => $product
         ]);
     }
 
@@ -80,13 +79,17 @@ class ProductController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
+            'price' => 'required|integer|min:0',
             'stock' => 'required|integer|min:0'
         ]);
 
         $product->update($validatedData);
 
-        return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui');
+        // return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui');
+        return back()->with([
+            'products' => $product,
+            'success' => 'Produk berhasil diperbarui'
+        ]);
     }
 
     /**

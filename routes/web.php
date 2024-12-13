@@ -22,12 +22,13 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', fn() => Inertia::render('Dashboard'))->name('dashboard');
-    // Route::get('/product', [ProductController::class, 'index'])->name('product');
+
+    // Product Routes
     Route::prefix('/product')->group(function () {
         Route::get('/', [ProductController::class, 'index'])->name('products.index');
-        Route::get('/create', [ProductController::class, 'create'])->name('products.create');
         Route::post('/', [ProductController::class, 'store'])->name('products.store');
-        Route::get('/{product}', [ProductController::class, 'show'])->name('products.show');
+        Route::get('/create', [ProductController::class, 'create'])->name('products.create');
+        Route::get('/product-detail={product}', [ProductController::class, 'show'])->name('products.show');
         Route::get('/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
         Route::put('/{product}', [ProductController::class, 'update'])->name('products.update');
         Route::delete('/{product}', [ProductController::class, 'destroy'])->name('products.destroy');

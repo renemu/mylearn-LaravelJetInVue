@@ -2,16 +2,31 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import DatatableClient from "@/Components/Datatable/DatatableClient.vue";
 import { reactive, ref } from "vue";
-import { useForm, usePage } from "@inertiajs/vue3";
+import { useForm } from "@inertiajs/vue3";
+
+const props = defineProps({
+    products: {
+        type: Array,
+        default: () => [],
+    },
+});
 const state = reactive({
     columns: [
         {
+            width: "8%",
             name: "id",
             label: "ID",
         },
         {
+            width: "25%",
             name: "name",
             label: "Name",
+            class: "text-orange-600 hover:text-blue-600",
+            custom: {
+                icon: "ri-instance-line text-sm text-blue-600",
+                routeName: "products.show",
+                routeParam: "id",
+            },
         },
         {
             name: "description",
@@ -20,43 +35,42 @@ const state = reactive({
         {
             name: "price",
             label: "Price",
+            isCurrency: true,
         },
         {
             name: "stock",
             label: "Stock",
         },
+        {
+            name: "created_at",
+            label: "Created",
+            isDate: true,
+        },
+        {
+            name: "updated_at",
+            label: "Updated",
+            isDateTime: true,
+        },
+        // {
+        //     name: "action",
+        //     label: "Action",
+        //     btnAction: true,
+        // },
     ],
-});
-const props = defineProps({
-    products: {
-        type: Array,
-        default: () => [],
-    },
+    formData: {},
 });
 const isModalOpen = ref(false);
 
 function addData() {
     isModalOpen.value = true;
+    state.formData = {};
 }
 
-const formData = useForm({
-    name: "",
-    description: "",
-    price: "",
-    stock: "",
-});
 function submitData() {
-    formData.post(route("products.store"), {
-        onSuccess: () => {
-            // Reset form dan tutup modal
-            isModalOpen.value = false;
-            formData.reset();
-            console.log("halah");
-        },
-        onError: (errors) => {
-            console.error("Error during submission:", errors);
-        },
-    });
+    const form = useForm(state.formData);
+    form.post("/product");
+    isModalOpen.value = false;
+    state.formData = {};
 }
 </script>
 
@@ -71,7 +85,7 @@ function submitData() {
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="flex justify-end mb-4">
                     <button
-                        class="flex items-center px-4 py-2 bg-blue-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 focus:outline-none"
+                        class="flex items-center px-4 py-2 bg-blue-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600 focus:ring-0"
                         @click="addData"
                     >
                         <i class="ri-add-circle-line me-1 text-xl"></i>
@@ -85,6 +99,17 @@ function submitData() {
                         :dataTable="products"
                         :column="state.columns"
                     />
+                    <!-- <p class="text-ellipsis overflow-hidden">
+                        Lorem, ipsum dolor sit amet consectetur adipisicing
+                        elit. Quidem iusto mollitia suscipit molestiae similique
+                        impedit provident exercitationem temporibus, aut
+                        accusamus cum sequi distinctio ducimus sint, quasi
+                        cupiditate quaerat beatae nemo. Lorem ipsum dolor sit,
+                        amet consectetur adipisicing elit. Saepe harum vel eaque
+                        soluta, temporibus distinctio. Ea commodi debitis
+                        facilis deserunt voluptate, eligendi sed quibusdam atque
+                        earum nisi ipsa cum quas!
+                    </p> -->
                 </div>
             </div>
         </div>
@@ -111,7 +136,7 @@ function submitData() {
                             <input
                                 id="name"
                                 type="text"
-                                v-model="formData.name"
+                                v-model="state.formData.name"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                             />
                         </div>
@@ -122,7 +147,7 @@ function submitData() {
                             >
                             <input
                                 type="text"
-                                v-model="formData.description"
+                                v-model="state.formData.description"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                             />
                         </div>
@@ -133,7 +158,7 @@ function submitData() {
                             >
                             <input
                                 type="number"
-                                v-model="formData.price"
+                                v-model="state.formData.price"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                             />
                         </div>
@@ -144,7 +169,7 @@ function submitData() {
                             >
                             <input
                                 type="number"
-                                v-model="formData.stock"
+                                v-model="state.formData.stock"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                             />
                         </div>
