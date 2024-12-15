@@ -99,17 +99,6 @@ function submitData() {
                         :dataTable="products"
                         :column="state.columns"
                     />
-                    <!-- <p class="text-ellipsis overflow-hidden">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing
-                        elit. Quidem iusto mollitia suscipit molestiae similique
-                        impedit provident exercitationem temporibus, aut
-                        accusamus cum sequi distinctio ducimus sint, quasi
-                        cupiditate quaerat beatae nemo. Lorem ipsum dolor sit,
-                        amet consectetur adipisicing elit. Saepe harum vel eaque
-                        soluta, temporibus distinctio. Ea commodi debitis
-                        facilis deserunt voluptate, eligendi sed quibusdam atque
-                        earum nisi ipsa cum quas!
-                    </p> -->
                 </div>
             </div>
         </div>

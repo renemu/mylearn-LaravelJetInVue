@@ -169,14 +169,8 @@ function formatDateTime(date) {
                     v-model="rowsPerPage"
                     class="border rounded-lg px-2 py-1 focus:ring-0"
                 >
-                    <option
-                        v-for="option in rowsPerPageOptions"
-                        :key="option"
-                        :value="option"
-                    >
-                        <span>
-                            {{ option }}
-                        </span>
+                    <option v-for="option in rowsPerPageOptions" :key="option">
+                        {{ option }}
                     </option>
                     <option value="custom">Custom</option>
                 </select>

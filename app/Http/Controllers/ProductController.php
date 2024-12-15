@@ -16,7 +16,8 @@ class ProductController extends Controller
 
         // Render halaman produk menggunakan Inertia
         return Inertia::render('Product/Product', [
-            'products' => $products
+            'products' => $products,
+
         ]);
     }
 

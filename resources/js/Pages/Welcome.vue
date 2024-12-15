@@ -1,22 +1,33 @@
 <script setup>
-import { Head, Link } from "@inertiajs/vue3";
-import { useForm } from "@inertiajs/vue3";
+import { usePage, Head, Link } from "@inertiajs/vue3";
+import { onMounted, reactive, ref } from "vue";
 
-defineProps({
+const props = defineProps({
+    products: {
+        type: Array,
+        default: () => [],
+    },
     canLogin: Boolean,
     canRegister: Boolean,
 });
-
-const form = useForm("createProduct", {
-    name: null,
-    slug: null,
+const state = reactive({
+    products: props.products,
 });
-
-const submit = () => {
-    form.post(route("products.create"), {
-        onSuccess: () => form.reset(),
-    });
+const page = usePage();
+// const products = ref(props.products);
+const fetchData = () => {
+    // router.get(route("products.index"), {
+    //     preserveState: true,
+    //     preserveScroll: true,
+    //     only: ["products"],
+    //     onError: (errors) => {
+    //         console.error("Fetch error:", errors);
+    //     },
+    // });
 };
+onMounted(() => {
+    fetchData();
+});
 </script>
 
 <template>
@@ -52,17 +63,20 @@ const submit = () => {
                                 Log in
                             </Link>
 
-                            <Link
+                            <!-- <Link
                                 v-if="canRegister"
                                 :href="route('register')"
                                 class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                             >
                                 Register
-                            </Link>
+                            </Link> -->
                         </template>
                     </nav>
                 </header>
-                <main class="mt-6">Test Default</main>
+                <main class="mt-6">
+                    <!-- {{ products }} -->
+                    {{ page }}
+                </main>
             </div>
         </div>
     </div>
