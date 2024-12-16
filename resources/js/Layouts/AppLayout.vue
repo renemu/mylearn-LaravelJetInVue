@@ -43,12 +43,22 @@ const logout = () => {
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
                         <div class="flex">
-                            <!-- Logo -->
                             <div class="shrink-0 flex items-center">
+                                <Link
+                                    class="me-1 px-2 py-1 bg-red-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600 focus:ring-0"
+                                    href="/"
+                                    ><i class="ri-close-circle-line"></i
+                                ></Link>
+                                <span class="text-2xl uppercase font-bold">
+                                    Admin Panel
+                                </span>
+                            </div>
+                            <!-- Logo -->
+                            <!-- <div class="shrink-0 flex items-center">
                                 <Link :href="route('dashboard')">
                                     <ApplicationMark class="block h-9 w-auto" />
                                 </Link>
-                            </div>
+                            </div> -->
 
                             <!-- Navigation Links -->
                             <div

@@ -1,6 +1,5 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import Welcome from "@/Components/Welcome.vue";
 </script>
 
 <template>
@@ -17,7 +16,6 @@ import Welcome from "@/Components/Welcome.vue";
                     class="bg-white overflow-hidden shadow-xl sm:rounded-lg card-animate"
                 >
                     <!-- <Welcome /> -->
-                    test
                 </div>
             </div>
         </div>

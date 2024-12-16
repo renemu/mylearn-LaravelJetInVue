@@ -23,7 +23,7 @@ function updateData() {
 }
 function submitData() {
     const form = useForm(state.formData);
-    form.put(`/product/${props.products.id}`);
+    form.put(`/admin/product/${props.products.id}`);
     isModalOpen.value = false;
     state.formData = {};
 }

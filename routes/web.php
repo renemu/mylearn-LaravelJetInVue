@@ -1,18 +1,16 @@
 <?php
 
 use App\Http\Controllers\ProductController;
-use Illuminate\Foundation\Application;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
+    return Inertia::render('Home', [
+        // 'canLogin' => Route::has('login'),
+        'product' => Product::all(),
     ]);
 });
 
@@ -21,10 +19,13 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', fn() => Inertia::render('Dashboard'))->name('dashboard');
+    // Dashboard Routes
+    Route::get('admin/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
 
     // Product Routes
-    Route::prefix('/product')->group(function () {
+    Route::prefix('admin/product')->group(callback: function () {
         Route::get('/', [ProductController::class, 'index'])->name('products.index');
         Route::post('/', [ProductController::class, 'store'])->name('products.store');
         Route::get('/create', [ProductController::class, 'create'])->name('products.create');

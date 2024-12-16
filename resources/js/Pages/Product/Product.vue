@@ -68,7 +68,7 @@ function addData() {
 
 function submitData() {
     const form = useForm(state.formData);
-    form.post("/product");
+    form.post("/admin/product");
     isModalOpen.value = false;
     state.formData = {};
 }
