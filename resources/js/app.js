@@ -24,7 +24,7 @@ createInertiaApp({
                 // Tambahkan favicon
                 const link = document.createElement("link");
                 link.rel = "icon";
-                link.href = "/favicon.ico";
+                link.href = "/logo genah.png";
                 document.head.appendChild(link);
             },
         });

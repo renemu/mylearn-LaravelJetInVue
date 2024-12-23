@@ -4,8 +4,8 @@ import { ref } from "vue";
 const showMobileMenu = ref(false);
 </script>
 <template>
-    <div class="absolute-left-20 z-100 max-w-auto">
-        <nav class="bg-green-900 text-white py-4">
+    <div class="absolute z-100 w-full">
+        <nav class="bg-0 text-white py-4 w-50">
             <div class="mx-10 flex justify-between items-center">
                 <div class="flex items-center">
                     <img
@@ -17,19 +17,28 @@ const showMobileMenu = ref(false);
                 <div class="hidden md:flex space-x-10 items-center">
                     <a href="#" class="hover:border-b">Home</a>
                     <a href="#" class="hover:border-b">About Us</a>
-                    <a href="#" class="hover:border-b">Life at Genah</a>
-                    <a href="#" class="hover:border-b">Career</a>
-                    <a href="#" class="hover:border-b">Our Innovation</a>
-                    <a href="#" class="hover:border-b">Social Activity</a>
-                    <a href="#" class="hover:border-b">Galery</a>
-                    <a href="#" class="hover:border-b">Blog</a>
+                    <a href="#" class="hover:border-b text-black"
+                        >Life at Genah</a
+                    >
+                    <a href="#" class="hover:border-b text-black">Career</a>
+                    <a href="#" class="hover:border-b text-black"
+                        >Our Innovation</a
+                    >
+                    <a href="#" class="hover:border-b text-black"
+                        >Social Activity</a
+                    >
+                    <a href="#" class="hover:border-b text-black">Galery</a>
+                    <a href="#" class="hover:border-b text-black">Blog</a>
                     <a
                         href="#"
-                        class="bg-yellow-500 hover:bg-yellow-600 text-green-900 px-4 py-2 rounded"
+                        class="bg-yellow-400 hover:bg-yellow-600 text-black px-4 py-2 rounded"
                     >
                         Contact Us
                     </a>
-                    <a href="#" class="block hover:border-b uppercase">
+                    <a
+                        href="#"
+                        class="block hover:border-b text-black uppercase"
+                    >
                         <i class="ri-global-line"></i>
                         In</a
                     >

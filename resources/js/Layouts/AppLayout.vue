@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { Head, Link, router } from "@inertiajs/vue3";
-import ApplicationMark from "@/Components/ApplicationMark.vue";
+// import ApplicationMark from "@/Components/ApplicationMark.vue";
 import Banner from "@/Components/Banner.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
@@ -46,7 +46,7 @@ const logout = () => {
                             <div class="shrink-0 flex items-center">
                                 <Link
                                     class="me-1 px-2 py-1 bg-red-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600 focus:ring-0"
-                                    href="/"
+                                    :href="route('home')"
                                     ><i class="ri-close-circle-line"></i
                                 ></Link>
                                 <span class="text-2xl uppercase font-bold">

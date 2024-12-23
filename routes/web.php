@@ -7,11 +7,19 @@ use Inertia\Inertia;
 
 
 
-Route::get('/', function () {
-    return Inertia::render('Home', [
-        // 'canLogin' => Route::has('login'),
-        'product' => Product::all(),
-    ]);
+// Route::get('/', function () {
+//     return Inertia::render('Home', [
+//         // 'canLogin' => Route::has('login'),
+//         'product' => Product::all(),
+//     ]);
+// });
+
+Route::prefix('/')->group(function () {
+    Route::get('/', function () {
+        return Inertia::render('Home', [
+            'product' => Product::all()
+        ]);
+    })->name('home');
 });
 
 Route::middleware([
