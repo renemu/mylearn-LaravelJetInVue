@@ -86,11 +86,14 @@ class ProductController extends Controller
 
         $product->update($validatedData);
 
-        // return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui');
-        return back()->with([
+        return redirect()->route('products.index')->with([
             'products' => $product,
             'success' => 'Produk berhasil diperbarui'
         ]);
+        // return back()->with([
+        //     'products' => $product,
+        //     'success' => 'Produk berhasil diperbarui'
+        // ]);
     }
 
     /**

@@ -33,7 +33,7 @@ const logout = () => {
 
 <template>
     <div>
-        <Head :title="title" />
+        <Head :title="'Admin ' + title" />
 
         <Banner />
 
@@ -69,6 +69,12 @@ const logout = () => {
                                     :active="route().current('dashboard')"
                                 >
                                     Dashboard
+                                </NavLink>
+                                <NavLink
+                                    :href="route('pages.index')"
+                                    :active="route().current('pages.index')"
+                                >
+                                    Pages
                                 </NavLink>
                                 <NavLink
                                     :href="route('products.index')"

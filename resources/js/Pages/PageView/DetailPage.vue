@@ -1,11 +1,12 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Link, router, useForm } from "@inertiajs/vue3";
-import { reactive, ref } from "vue";
+import { Link, useForm } from "@inertiajs/vue3";
 import Swal from "sweetalert2";
+import { reactive, ref } from "vue";
+
 const isModalOpen = ref(false);
 const props = defineProps({
-    products: {
+    pages: {
         type: Object,
         default: () => {},
     },
@@ -13,52 +14,39 @@ const props = defineProps({
 const state = reactive({
     formData: {},
 });
-function updateData() {
+function showUpdate() {
     isModalOpen.value = true;
     state.formData = {
-        name: props.products.name,
-        description: props.products.description,
-        price: props.products.price,
-        stock: props.products.stock,
+        title: props.pages.title,
+        description: props.pages.description,
     };
 }
 function submitData() {
     const form = useForm(state.formData);
-    form.put(`/admin/product/${props.products.id}`);
+    form.put(`/admin/pages/${props.pages.id}`);
     isModalOpen.value = false;
     state.formData = {};
     Swal.fire("success", "The data has been updated successfully!", "success");
 }
-function deleteData() {
-    const form = useForm({});
-    form.delete(`/admin/product/${props.products.id}`);
-}
 </script>
 <template>
-    <AppLayout title="Detail Product">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+    <AppLayout title="Detail Pages">
+        <template #header
+            ><h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 <Link
-                    :href="route('products.index')"
+                    :href="route('pages.index')"
                     class="px-2 py-1 bg-orange-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600 focus:ring-0"
                 >
                     <i class="ri-arrow-left-line"></i>
                 </Link>
-                {{ products.name }}
+                {{ pages.title }}
             </h2>
         </template>
         <div class="py-12 max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="flex justify-end mb-4">
                 <button
-                    class="flex items-center px-4 py-2 bg-red-500 text-white font-medium rounded-lg shadow-md hover:bg-red-600 focus:ring-0 me-1"
-                    @click="deleteData"
-                >
-                    <i class="ri-delete-bin-line me-1 text-xl"></i>
-                    Delete Data
-                </button>
-                <button
                     class="flex items-center px-4 py-2 bg-orange-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600 focus:ring-0"
-                    @click="updateData"
+                    @click="showUpdate"
                 >
                     <i class="ri-edit-line me-1 text-xl"></i>
                     Update Data
@@ -68,20 +56,12 @@ function deleteData() {
                 class="p-3 max-w-auto bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden"
             >
                 <div class="py-2">
-                    <label for="">Name :</label>
-                    {{ products.name }}
+                    <label for="">Title :</label>
+                    {{ pages.title }}
                 </div>
                 <div class="py-2">
                     <label for="">Description :</label>
-                    {{ products.description }}
-                </div>
-                <div class="py-2">
-                    <label for="">Price :</label>
-                    {{ products.price }}
-                </div>
-                <div class="py-2">
-                    <label for="">Stock :</label>
-                    {{ products.stock }}
+                    {{ pages.description }}
                 </div>
             </div>
         </div>
@@ -100,14 +80,14 @@ function deleteData() {
                     <form @submit.prevent="submitData">
                         <div class="mb-4">
                             <label
-                                for="name"
+                                for="title"
                                 class="block text-sm font-medium text-gray-700"
-                                >Name</label
+                                >Title</label
                             >
                             <input
-                                id="name"
+                                id="title"
                                 type="text"
-                                v-model="state.formData.name"
+                                v-model="state.formData.title"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                             />
                         </div>
@@ -119,28 +99,6 @@ function deleteData() {
                             <input
                                 type="text"
                                 v-model="state.formData.description"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                            />
-                        </div>
-                        <div class="mb-4">
-                            <label
-                                class="block text-sm font-medium text-gray-700"
-                                >Price</label
-                            >
-                            <input
-                                type="number"
-                                v-model="state.formData.price"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                            />
-                        </div>
-                        <div class="mb-4">
-                            <label
-                                class="block text-sm font-medium text-gray-700"
-                                >Stock</label
-                            >
-                            <input
-                                type="number"
-                                v-model="state.formData.stock"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                             />
                         </div>
