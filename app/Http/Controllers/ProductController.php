@@ -15,7 +15,7 @@ class ProductController extends Controller
         $products = Product::all();
 
         // Render halaman produk menggunakan Inertia
-        return Inertia::render('Product/Product', [
+        return Inertia::render('Product/Index', [
             'products' => $products,
 
         ]);

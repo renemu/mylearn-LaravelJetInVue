@@ -12,7 +12,7 @@ class PageController extends Controller
     {
         $page = Page::all();
 
-        return Inertia::render('PageView/Pages', [
+        return Inertia::render('PageView/Index', [
             'pages' => $page,
         ]);
     }
@@ -35,7 +35,7 @@ class PageController extends Controller
 
     public function show(Page $page)
     {
-        return Inertia::render('PageView/DetailPage', [
+        return Inertia::render('PageView/Detail', [
             'pages' => $page,
         ]);
     }
