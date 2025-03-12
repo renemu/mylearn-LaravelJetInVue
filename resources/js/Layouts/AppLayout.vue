@@ -44,11 +44,6 @@ const logout = () => {
                     <div class="flex justify-between h-16">
                         <div class="flex">
                             <div class="shrink-0 flex items-center">
-                                <Link
-                                    class="me-1 px-2 py-1 bg-red-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600 focus:ring-0"
-                                    :href="route('home')"
-                                    ><i class="ri-close-circle-line"></i
-                                ></Link>
                                 <span class="text-2xl uppercase font-bold">
                                     Admin Panel
                                 </span>
@@ -300,6 +295,9 @@ const logout = () => {
                                             API Tokens
                                         </DropdownLink>
 
+                                        <DropdownLink :href="route('home')">
+                                            Home
+                                        </DropdownLink>
                                         <div class="border-t border-gray-200" />
 
                                         <!-- Authentication -->

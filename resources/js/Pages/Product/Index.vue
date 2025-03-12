@@ -105,7 +105,6 @@ function submitData() {
             </div>
         </div>
     </AppLayout>
-    <!-- Modal dengan Transisi -->
     <transition name="fade">
         <div
             v-if="isModalOpen"
